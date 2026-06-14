@@ -51,8 +51,8 @@ Dans les parametres du repo GitHub:
 
 1. Aller dans `Settings`.
 2. Aller dans `Pages`.
-3. Source: `Deploy from a branch`.
-4. Branch: `main`.
-5. Folder: `/root`.
+3. Source: `GitHub Actions`.
+4. Sauvegarder.
+5. Retourner dans `Actions` et relancer `Deploy GitHub Pages` si le premier essai a echoue.
 
 Le site ouvrira `index.html`, qui redirige vers le Party Manager.
