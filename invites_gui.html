@@ -229,6 +229,7 @@
       <div class="actions">
         <button id="reloadBtn" type="button">Recharger</button>
         <button id="saveProjectBtn" class="primary" type="button">Sauvegarder projet</button>
+        <button id="pushGithubBtn" type="button">Push GitHub</button>
         <div class="status" id="statusText"></div>
       </div>
     </header>
@@ -953,6 +954,31 @@ Gabriel et moi pensions faire un debut au restaurant et une fiesta a la maison p
       render();
     }
 
+    async function pushToGithub() {
+      if (!state.serverMode) {
+        setStatus("Push GitHub disponible seulement en mode local avec le serveur Python.", true);
+        return;
+      }
+      if (!state.project) return;
+
+      setStatus("Sauvegarde et push vers GitHub...");
+      const response = await fetch("/api/git/push", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ project: state.project }),
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.details || payload.error || "Push GitHub impossible");
+
+      state.dirty = false;
+      const message = payload.committed
+        ? "Projet sauvegarde, committe et pousse sur GitHub."
+        : "GitHub deja a jour, rien a committer.";
+      setStatus(message);
+      await refreshProjects();
+      render();
+    }
+
     async function loadProject(id) {
       if (state.dirty && !window.confirm("Charger un autre projet va perdre les changements non sauvegardes. Continuer?")) return;
       if (!state.serverMode) {
@@ -1048,6 +1074,7 @@ Gabriel et moi pensions faire un debut au restaurant et une fiesta a la maison p
     }
 
     $("#saveProjectBtn").addEventListener("click", () => saveProject().catch((error) => setStatus(error.message, true)));
+    $("#pushGithubBtn").addEventListener("click", () => pushToGithub().catch((error) => setStatus(error.message, true)));
     $("#reloadBtn").addEventListener("click", () => {
       if (state.dirty && !window.confirm("Recharger va perdre les changements non sauvegardes. Continuer?")) return;
       loadProjectData().catch((error) => setStatus(error.message, true));

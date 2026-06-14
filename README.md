@@ -24,6 +24,8 @@ http://127.0.0.1:8787
 
 En local, les sauvegardes modifient directement les fichiers JSON.
 
+Le bouton `Push GitHub` est disponible en mode local. Il sauvegarde le projet, cree un commit s'il y a des changements, puis pousse sur `origin/main`.
+
 ## Ouvrir sur GitHub Pages
 
 GitHub Pages peut servir la page comme site web statique. Dans ce mode, il n'y a pas de serveur Python, donc:
@@ -32,6 +34,7 @@ GitHub Pages peut servir la page comme site web statique. Dans ce mode, il n'y a
 - les changements sont sauvegardes dans le navigateur;
 - le bouton `Exporter JSON` permet de telecharger le projet modifie;
 - le bouton `Importer JSON` permet de recharger un projet exporte.
+- le bouton `Push GitHub` ne fonctionne pas sur GitHub Pages, parce qu'un site statique ne peut pas garder un token GitHub secret de facon securitaire.
 
 Pour synchroniser entre appareils avec GitHub, exporter le JSON modifie, puis remplacer le fichier correspondant dans `json/projects/`.
 

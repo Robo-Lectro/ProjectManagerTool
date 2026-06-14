@@ -6,6 +6,7 @@ import json
 import mimetypes
 import os
 import re
+import subprocess
 from datetime import datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -400,6 +401,60 @@ def save_project(project: dict, make_backup: bool = True) -> dict:
     return project
 
 
+def run_git(args: list[str]) -> tuple[int, str]:
+    completed = subprocess.run(
+        ["git", *args],
+        cwd=BASE_DIR,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+    )
+    return completed.returncode, completed.stdout.strip()
+
+
+def git_status_porcelain() -> str:
+    code, output = run_git(["status", "--porcelain"])
+    if code != 0:
+        raise RuntimeError(output or "Impossible de lire le statut Git.")
+    return output
+
+
+def push_to_github(project: dict | None = None) -> dict:
+    if project is not None:
+        save_project(project)
+
+    status_before = git_status_porcelain()
+    committed = False
+    commit_output = "Aucun changement a committer."
+
+    if status_before:
+        code, output = run_git(["add", "."])
+        if code != 0:
+            raise RuntimeError(output or "git add a echoue.")
+
+        commit_message = f"Update party project {datetime.now().strftime('%Y-%m-%d %H:%M')}"
+        code, commit_output = run_git(["commit", "-m", commit_message])
+        if code != 0:
+            raise RuntimeError(commit_output or "git commit a echoue.")
+        committed = True
+
+    code, pull_output = run_git(["pull", "--rebase", "origin", "main"])
+    if code != 0:
+        raise RuntimeError(pull_output or "git pull --rebase a echoue.")
+
+    code, push_output = run_git(["push", "origin", "main"])
+    if code != 0:
+        raise RuntimeError(push_output or "git push a echoue.")
+
+    return {
+        "committed": committed,
+        "commit_output": commit_output,
+        "pull_output": pull_output,
+        "push_output": push_output,
+    }
+
+
 def list_projects() -> list[dict]:
     ensure_dirs()
     projects = []
@@ -522,6 +577,12 @@ class PartyHandler(BaseHTTPRequestHandler):
                 project["message"] = str(payload.get("text") or "")
                 project = save_project(project)
                 self.send_json(200, {"ok": True, "message": project["message"]})
+                return
+
+            if route == "/api/git/push":
+                project = payload.get("project") if isinstance(payload, dict) else None
+                result = push_to_github(project if isinstance(project, dict) else None)
+                self.send_json(200, {"ok": True, **result})
                 return
 
         except json.JSONDecodeError as error:
