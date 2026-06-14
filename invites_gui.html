@@ -1,0 +1,1102 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Party Manager - 25 ans mariage</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f8f4;
+      --panel: #ffffff;
+      --text: #232722;
+      --muted: #687066;
+      --line: #dce2d6;
+      --accent: #2f6f4e;
+      --accent-soft: #e5f1e9;
+      --danger: #a43131;
+      --warn: #a05c00;
+      --shadow: 0 8px 24px rgba(34, 39, 31, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 15px;
+    }
+
+    button, input, select, textarea { font: inherit; }
+
+    button {
+      min-height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--panel);
+      color: var(--text);
+      cursor: pointer;
+      padding: 8px 11px;
+    }
+
+    button:hover { border-color: #b7c4ae; }
+    button.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 650; }
+    button.danger { color: var(--danger); }
+
+    input, select, textarea {
+      width: 100%;
+      min-height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #fff;
+      color: var(--text);
+      padding: 7px 9px;
+    }
+
+    textarea { resize: vertical; min-height: 38px; line-height: 1.45; }
+
+    .app { max-width: 1440px; margin: 0 auto; padding: 18px; }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: start;
+      margin-bottom: 12px;
+    }
+
+    h1 { margin: 0 0 5px; font-size: clamp(26px, 3vw, 38px); line-height: 1.1; letter-spacing: 0; }
+    h2 { margin: 0 0 10px; font-size: 22px; }
+    h3 { margin: 0 0 10px; font-size: 18px; }
+    .sub { color: var(--muted); margin: 0; }
+
+    .actions, .row-actions, .section-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .actions { justify-content: flex-end; }
+    .status { color: var(--muted); font-size: 13px; min-height: 18px; text-align: right; width: 100%; }
+
+    .nav {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 4px 0 12px;
+      margin-bottom: 8px;
+    }
+
+    .tab-btn {
+      white-space: nowrap;
+      background: #fff;
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      font-weight: 650;
+    }
+
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(120px, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 12px;
+    }
+
+    .stat span { display: block; color: var(--muted); font-size: 12px; margin-bottom: 5px; }
+    .stat strong { font-size: 23px; }
+
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) repeat(2, minmax(150px, 190px));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .table-wrap {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      overflow: auto;
+      margin-bottom: 14px;
+    }
+
+    table { border-collapse: collapse; min-width: 1160px; width: 100%; }
+    th, td { border-bottom: 1px solid var(--line); padding: 8px; text-align: left; vertical-align: top; }
+    th { position: sticky; top: 0; z-index: 1; background: #eef3ea; color: #384137; font-size: 12px; white-space: nowrap; }
+    tr:last-child td { border-bottom: 0; }
+
+    .col-group { min-width: 180px; }
+    .col-people { min-width: 220px; }
+    .col-small { width: 86px; }
+    .col-notes { min-width: 250px; }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 5px 9px;
+      font-size: 13px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .prep-list { display: grid; gap: 8px; }
+
+    .prep-item {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 8px;
+      align-items: start;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      background: #fff;
+    }
+
+    .prep-item input[type="checkbox"] { width: 20px; min-height: 20px; margin-top: 8px; }
+    .prep-item.done { background: #f4f8f1; }
+    .prep-fields { display: grid; gap: 7px; }
+
+    .message-box { min-height: 320px; white-space: pre-wrap; }
+    .project-list { display: grid; gap: 8px; }
+
+    .project-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      background: #fff;
+    }
+
+    .empty { color: var(--muted); padding: 18px; text-align: center; }
+    .hidden { display: none; }
+
+    @media (max-width: 960px) {
+      .app { padding: 12px; }
+      .topbar, .grid-2, .grid-3, .toolbar { grid-template-columns: 1fr; }
+      .actions, .section-actions { justify-content: stretch; }
+      .actions button, .section-actions button { flex: 1 1 150px; }
+      .status { text-align: left; }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .project-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div>
+        <h1 id="appTitle">25 ans mariage</h1>
+        <p class="sub" id="subtitle">Party manager</p>
+      </div>
+      <div class="actions">
+        <button id="reloadBtn" type="button">Recharger</button>
+        <button id="saveProjectBtn" class="primary" type="button">Sauvegarder projet</button>
+        <div class="status" id="statusText"></div>
+      </div>
+    </header>
+
+    <nav class="nav" aria-label="Sections">
+      <button class="tab-btn active" data-page="home" type="button">Accueil</button>
+      <button class="tab-btn" data-page="guests" type="button">Liste invites</button>
+      <button class="tab-btn" data-page="prep" type="button">Preparation</button>
+      <button class="tab-btn" data-page="budget" type="button">Budget</button>
+      <button class="tab-btn" data-page="message" type="button">Message</button>
+      <button class="tab-btn" data-page="projects" type="button">Projets</button>
+    </nav>
+
+    <section class="page active" id="page-home">
+      <section class="stats" aria-label="Resume">
+        <div class="stat"><span>Minimum invites</span><strong id="homeMin">0</strong></div>
+        <div class="stat"><span>Maximum invites</span><strong id="homeMax">0</strong></div>
+        <div class="stat"><span>Presences</span><strong id="homePresent">0</strong></div>
+        <div class="stat"><span>Taches faites</span><strong id="homePrepDone">0</strong></div>
+        <div class="stat"><span>Budget estime</span><strong id="homeBudgetEst">0 $</strong></div>
+        <div class="stat"><span>Reste a payer</span><strong id="homeBudgetLeft">0 $</strong></div>
+      </section>
+
+      <div class="grid-2">
+        <section class="panel">
+          <h2>Projet</h2>
+          <div class="grid-2">
+            <label>Nom du projet<input id="projectName" type="text"></label>
+            <label>Evenement<input id="projectEvent" type="text"></label>
+          </div>
+          <label>Notes<textarea id="projectNotes"></textarea></label>
+          <label>Contribution<textarea id="projectContribution"></textarea></label>
+        </section>
+
+        <section class="panel">
+          <h2>Plan actuel</h2>
+          <p class="sub">Restaurant probablement Les Berges, puis fiesta a la maison pour ceux qui veulent suivre.</p>
+          <ul>
+            <li>25 a 35 personnes visees.</li>
+            <li>Chips, cochonneries, alcool, boissons et gateau.</li>
+            <li>Jeux de societe, musique et karaoke.</li>
+            <li>Contribution volontaire possible comme cadeau de 25 ans.</li>
+          </ul>
+        </section>
+      </div>
+    </section>
+
+    <section class="page" id="page-guests">
+      <section class="stats" aria-label="Resume invites">
+        <div class="stat"><span>Minimum</span><strong id="minCount">0</strong></div>
+        <div class="stat"><span>Maximum</span><strong id="maxCount">0</strong></div>
+        <div class="stat"><span>Presents</span><strong id="presentCount">0</strong></div>
+        <div class="stat"><span>Absents</span><strong id="absentCount">0</strong></div>
+        <div class="stat"><span>Peut-etre</span><strong id="maybeCount">0</strong></div>
+        <div class="stat"><span>Inconnus</span><strong id="unknownCount">0</strong></div>
+      </section>
+
+      <section class="toolbar" aria-label="Filtres invites">
+        <input id="searchInput" type="search" placeholder="Rechercher un nom, groupe ou note">
+        <select id="presenceFilter">
+          <option value="">Toutes les presences</option>
+          <option value="inconnue">Presence inconnue</option>
+          <option value="present">Present</option>
+          <option value="absent">Absent</option>
+          <option value="peut_etre">Peut-etre</option>
+        </select>
+        <select id="statutFilter">
+          <option value="">Tous les statuts</option>
+          <option value="a_inviter">A inviter</option>
+          <option value="invite">Invite</option>
+          <option value="a_confirmer">A confirmer</option>
+          <option value="confirme">Confirme</option>
+          <option value="refuse">Refuse</option>
+        </select>
+      </section>
+
+      <div class="section-actions">
+        <button id="addGuestBtn" type="button">Ajouter invite</button>
+      </div>
+
+      <section class="table-wrap" aria-label="Table des invites">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-group">Groupe</th>
+              <th class="col-people">Personnes</th>
+              <th>Statut</th>
+              <th>Presence</th>
+              <th class="col-small">Min</th>
+              <th class="col-small">Max</th>
+              <th class="col-notes">Notes</th>
+              <th>Compte</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="guestRows"></tbody>
+        </table>
+        <div class="empty hidden" id="emptyGuests">Aucun invite ne correspond aux filtres.</div>
+      </section>
+    </section>
+
+    <section class="page" id="page-prep">
+      <div class="grid-2">
+        <section class="panel">
+          <div class="section-actions">
+            <h2>Restaurant</h2>
+            <button data-add-prep="restaurant" type="button">Ajouter</button>
+          </div>
+          <div class="prep-list" id="restaurantPrep"></div>
+        </section>
+        <section class="panel">
+          <div class="section-actions">
+            <h2>A la maison</h2>
+            <button data-add-prep="maison" type="button">Ajouter</button>
+          </div>
+          <div class="prep-list" id="maisonPrep"></div>
+        </section>
+      </div>
+    </section>
+
+    <section class="page" id="page-budget">
+      <section class="stats" aria-label="Resume budget">
+        <div class="stat"><span>Total estime</span><strong id="budgetEstimated">0 $</strong></div>
+        <div class="stat"><span>Total reel</span><strong id="budgetReal">0 $</strong></div>
+        <div class="stat"><span>Total paye</span><strong id="budgetPaid">0 $</strong></div>
+        <div class="stat"><span>Reste</span><strong id="budgetLeft">0 $</strong></div>
+      </section>
+      <div class="section-actions">
+        <button id="addBudgetBtn" type="button">Ajouter depense</button>
+      </div>
+      <section class="table-wrap" aria-label="Budget">
+        <table>
+          <thead>
+            <tr>
+              <th>Categorie</th>
+              <th>Item</th>
+              <th class="col-small">Estime</th>
+              <th class="col-small">Reel</th>
+              <th class="col-small">Paye</th>
+              <th class="col-notes">Notes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="budgetRows"></tbody>
+        </table>
+      </section>
+    </section>
+
+    <section class="page" id="page-message">
+      <section class="panel">
+        <div class="section-actions">
+          <h2>Message Messenger</h2>
+          <button id="generateMessageBtn" type="button">Regenerer avec la liste</button>
+          <button id="copyMessageBtn" type="button">Copier</button>
+        </div>
+        <textarea class="message-box" id="messageText" spellcheck="true"></textarea>
+        <div class="status" id="messageStatus"></div>
+      </section>
+    </section>
+
+    <section class="page" id="page-projects">
+      <section class="panel">
+        <h2>Charger ou creer un projet</h2>
+        <div class="grid-3">
+          <input id="newProjectName" type="text" placeholder="Nom du nouveau party">
+          <button id="newProjectBtn" type="button">Nouveau projet</button>
+          <button id="refreshProjectsBtn" type="button">Rafraichir</button>
+          <button id="exportProjectBtn" type="button">Exporter JSON</button>
+        </div>
+        <div class="grid-3" style="margin-top: 10px;">
+          <input id="importProjectFile" type="file" accept="application/json,.json">
+          <button id="importProjectBtn" type="button">Importer JSON</button>
+          <div class="sub">Sur GitHub Pages, la sauvegarde reste dans le navigateur. Exporter le JSON permet de remettre le projet dans GitHub.</div>
+        </div>
+      </section>
+      <section class="panel">
+        <h2>Projets sauvegardes</h2>
+        <div class="project-list" id="projectList"></div>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const state = {
+      project: null,
+      projects: [],
+      dirty: false,
+      activePage: "home",
+      serverMode: true,
+    };
+
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+
+    const presenceLabels = { inconnue: "Inconnue", present: "Present", absent: "Absent", peut_etre: "Peut-etre" };
+    const statutLabels = { a_inviter: "A inviter", invite: "Invite", a_confirmer: "A confirmer", confirme: "Confirme", refuse: "Refuse" };
+
+    function setStatus(message, isError = false) {
+      $("#statusText").textContent = message;
+      $("#statusText").style.color = isError ? "var(--danger)" : "var(--muted)";
+    }
+
+    function setMessageStatus(message, isError = false) {
+      $("#messageStatus").textContent = message;
+      $("#messageStatus").style.color = isError ? "var(--danger)" : "var(--muted)";
+    }
+
+    function money(value) {
+      return `${Number(value || 0).toFixed(2)} $`;
+    }
+
+    function asInt(value, fallback = 0) {
+      const parsed = Number.parseInt(value, 10);
+      return Number.isFinite(parsed) ? parsed : fallback;
+    }
+
+    function asMoney(value, fallback = 0) {
+      const parsed = Number.parseFloat(value);
+      return Number.isFinite(parsed) ? Math.round(parsed * 100) / 100 : fallback;
+    }
+
+    function uid(prefix) {
+      return `${prefix}-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+    }
+
+    function markDirty(message = "Modifications non sauvegardees") {
+      state.dirty = true;
+      setStatus(message);
+      renderStats();
+    }
+
+    function peopleFromText(text) {
+      return text.split(",").map((person) => person.trim()).filter(Boolean);
+    }
+
+    function textFromPeople(people) {
+      return Array.isArray(people) ? people.join(", ") : "";
+    }
+
+    function ensureProjectDefaults() {
+      const p = state.project;
+      if (!p) return;
+      p.invites = Array.isArray(p.invites) ? p.invites : [];
+      p.preparation = p.preparation && typeof p.preparation === "object" ? p.preparation : {};
+      p.preparation.restaurant = Array.isArray(p.preparation.restaurant) ? p.preparation.restaurant : [];
+      p.preparation.maison = Array.isArray(p.preparation.maison) ? p.preparation.maison : [];
+      p.budget = Array.isArray(p.budget) ? p.budget : [];
+      p.message = p.message || "";
+      p.contribution = p.contribution || "";
+    }
+
+    function ensureGuest(guest) {
+      guest.groupe = guest.groupe || "";
+      guest.personnes = Array.isArray(guest.personnes) ? guest.personnes : [];
+      guest.nombre_min = asInt(guest.nombre_min, 0);
+      guest.nombre_max = Math.max(asInt(guest.nombre_max, guest.nombre_min), guest.nombre_min);
+      guest.statut = guest.statut || "a_inviter";
+      guest.presence = guest.presence || "inconnue";
+      guest.notes = guest.notes || "";
+      return guest;
+    }
+
+    function calculateInviteStats() {
+      const stats = { min: 0, max: 0, present: 0, absent: 0, maybe: 0, unknown: 0 };
+      (state.project?.invites || []).forEach((guest) => {
+        ensureGuest(guest);
+        stats.min += guest.nombre_min;
+        stats.max += guest.nombre_max;
+        if (guest.presence === "present") stats.present += guest.nombre_max;
+        else if (guest.presence === "absent") stats.absent += guest.nombre_max;
+        else if (guest.presence === "peut_etre") stats.maybe += guest.nombre_max;
+        else stats.unknown += guest.nombre_max;
+      });
+      return stats;
+    }
+
+    function calculatePrepStats() {
+      const items = [...(state.project?.preparation?.restaurant || []), ...(state.project?.preparation?.maison || [])];
+      return { done: items.filter((item) => item.fait).length, total: items.length };
+    }
+
+    function calculateBudgetStats() {
+      const totals = { estimated: 0, real: 0, paid: 0, left: 0 };
+      (state.project?.budget || []).forEach((item) => {
+        item.cout_estime = asMoney(item.cout_estime);
+        item.cout_reel = asMoney(item.cout_reel);
+        item.paye = asMoney(item.paye);
+        totals.estimated += item.cout_estime;
+        totals.real += item.cout_reel;
+        totals.paid += item.paye;
+      });
+      totals.left = Math.max(totals.real - totals.paid, 0);
+      return totals;
+    }
+
+    function renderStats() {
+      const invite = calculateInviteStats();
+      const prep = calculatePrepStats();
+      const budget = calculateBudgetStats();
+
+      $("#homeMin").textContent = invite.min;
+      $("#homeMax").textContent = invite.max;
+      $("#homePresent").textContent = invite.present;
+      $("#homePrepDone").textContent = `${prep.done}/${prep.total}`;
+      $("#homeBudgetEst").textContent = money(budget.estimated);
+      $("#homeBudgetLeft").textContent = money(budget.left);
+
+      $("#minCount").textContent = invite.min;
+      $("#maxCount").textContent = invite.max;
+      $("#presentCount").textContent = invite.present;
+      $("#absentCount").textContent = invite.absent;
+      $("#maybeCount").textContent = invite.maybe;
+      $("#unknownCount").textContent = invite.unknown;
+
+      $("#budgetEstimated").textContent = money(budget.estimated);
+      $("#budgetReal").textContent = money(budget.real);
+      $("#budgetPaid").textContent = money(budget.paid);
+      $("#budgetLeft").textContent = money(budget.left);
+    }
+
+    function makeInput(value, onInput, type = "text") {
+      const input = document.createElement("input");
+      input.type = type;
+      input.value = value ?? "";
+      if (type === "number") input.min = "0";
+      input.addEventListener("input", () => onInput(input.value, input));
+      return input;
+    }
+
+    function makeTextarea(value, onInput) {
+      const input = document.createElement("textarea");
+      input.value = value || "";
+      input.addEventListener("input", () => onInput(input.value, input));
+      return input;
+    }
+
+    function makeSelect(labels, value, onChange) {
+      const select = document.createElement("select");
+      Object.entries(labels).forEach(([optionValue, label]) => {
+        const option = document.createElement("option");
+        option.value = optionValue;
+        option.textContent = label;
+        option.selected = optionValue === value;
+        select.appendChild(option);
+      });
+      select.addEventListener("change", () => onChange(select.value));
+      return select;
+    }
+
+    function matchesGuestFilters(guest) {
+      const query = $("#searchInput").value.trim().toLowerCase();
+      const presence = $("#presenceFilter").value;
+      const statut = $("#statutFilter").value;
+      const haystack = [guest.groupe, textFromPeople(guest.personnes), guest.statut, guest.presence, guest.notes].join(" ").toLowerCase();
+      if (query && !haystack.includes(query)) return false;
+      if (presence && guest.presence !== presence) return false;
+      if (statut && guest.statut !== statut) return false;
+      return true;
+    }
+
+    function renderGuests() {
+      const tbody = $("#guestRows");
+      tbody.innerHTML = "";
+      let visible = 0;
+      state.project.invites.forEach((guest, index) => {
+        ensureGuest(guest);
+        if (!matchesGuestFilters(guest)) return;
+        visible += 1;
+        const row = document.createElement("tr");
+
+        const cells = [
+          makeInput(guest.groupe, (value) => { guest.groupe = value; markDirty(); }),
+          makeInput(textFromPeople(guest.personnes), (value) => { guest.personnes = peopleFromText(value); markDirty(); }),
+          makeSelect(statutLabels, guest.statut, (value) => { guest.statut = value; markDirty(); }),
+          makeSelect(presenceLabels, guest.presence, (value) => { guest.presence = value; markDirty(); }),
+          makeInput(guest.nombre_min, (value, input) => {
+            guest.nombre_min = asInt(value);
+            if (guest.nombre_max < guest.nombre_min) guest.nombre_max = guest.nombre_min;
+            input.value = guest.nombre_min;
+            markDirty();
+            renderGuests();
+          }, "number"),
+          makeInput(guest.nombre_max, (value, input) => {
+            guest.nombre_max = Math.max(asInt(value), guest.nombre_min);
+            input.value = guest.nombre_max;
+            markDirty();
+            renderStats();
+          }, "number"),
+          makeTextarea(guest.notes, (value) => { guest.notes = value; markDirty(); }),
+        ];
+
+        cells.forEach((control) => {
+          const td = document.createElement("td");
+          td.appendChild(control);
+          row.appendChild(td);
+        });
+
+        const countTd = document.createElement("td");
+        const pill = document.createElement("span");
+        pill.className = "pill";
+        pill.textContent = guest.nombre_min === guest.nombre_max ? guest.nombre_max : `${guest.nombre_min}-${guest.nombre_max}`;
+        countTd.appendChild(pill);
+        row.appendChild(countTd);
+
+        const actionsTd = document.createElement("td");
+        const wrap = document.createElement("div");
+        wrap.className = "row-actions";
+        const countBtn = document.createElement("button");
+        countBtn.type = "button";
+        countBtn.textContent = "Compter";
+        countBtn.addEventListener("click", () => {
+          const count = guest.personnes.length || 1;
+          guest.nombre_min = count;
+          guest.nombre_max = count;
+          markDirty();
+          render();
+        });
+        const delBtn = document.createElement("button");
+        delBtn.type = "button";
+        delBtn.className = "danger";
+        delBtn.textContent = "Supprimer";
+        delBtn.addEventListener("click", () => {
+          state.project.invites.splice(index, 1);
+          markDirty();
+          render();
+        });
+        wrap.append(countBtn, delBtn);
+        actionsTd.appendChild(wrap);
+        row.appendChild(actionsTd);
+        tbody.appendChild(row);
+      });
+      $("#emptyGuests").classList.toggle("hidden", visible !== 0);
+    }
+
+    function renderPrepSection(section, targetId) {
+      const container = $(targetId);
+      container.innerHTML = "";
+      state.project.preparation[section].forEach((item, index) => {
+        const row = document.createElement("div");
+        row.className = `prep-item${item.fait ? " done" : ""}`;
+        const check = document.createElement("input");
+        check.type = "checkbox";
+        check.checked = Boolean(item.fait);
+        check.addEventListener("change", () => { item.fait = check.checked; markDirty(); renderPrep(); });
+
+        const fields = document.createElement("div");
+        fields.className = "prep-fields";
+        fields.append(
+          makeInput(item.titre, (value) => { item.titre = value; markDirty(); }),
+          makeTextarea(item.details, (value) => { item.details = value; markDirty(); }),
+        );
+
+        const del = document.createElement("button");
+        del.type = "button";
+        del.className = "danger";
+        del.textContent = "Supprimer";
+        del.addEventListener("click", () => {
+          state.project.preparation[section].splice(index, 1);
+          markDirty();
+          renderPrep();
+        });
+
+        row.append(check, fields, del);
+        container.appendChild(row);
+      });
+      if (!state.project.preparation[section].length) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = "Aucune tache pour le moment.";
+        container.appendChild(empty);
+      }
+    }
+
+    function renderPrep() {
+      renderPrepSection("restaurant", "#restaurantPrep");
+      renderPrepSection("maison", "#maisonPrep");
+      renderStats();
+    }
+
+    function renderBudget() {
+      const tbody = $("#budgetRows");
+      tbody.innerHTML = "";
+      state.project.budget.forEach((item, index) => {
+        const row = document.createElement("tr");
+        const controls = [
+          makeInput(item.categorie, (value) => { item.categorie = value; markDirty(); }),
+          makeInput(item.item, (value) => { item.item = value; markDirty(); }),
+          makeInput(item.cout_estime, (value) => { item.cout_estime = asMoney(value); markDirty(); }, "number"),
+          makeInput(item.cout_reel, (value) => { item.cout_reel = asMoney(value); markDirty(); }, "number"),
+          makeInput(item.paye, (value) => { item.paye = asMoney(value); markDirty(); }, "number"),
+          makeTextarea(item.notes, (value) => { item.notes = value; markDirty(); }),
+        ];
+        controls.forEach((control) => {
+          const td = document.createElement("td");
+          td.appendChild(control);
+          row.appendChild(td);
+        });
+        const actionsTd = document.createElement("td");
+        const del = document.createElement("button");
+        del.type = "button";
+        del.className = "danger";
+        del.textContent = "Supprimer";
+        del.addEventListener("click", () => {
+          state.project.budget.splice(index, 1);
+          markDirty();
+          renderBudget();
+        });
+        actionsTd.appendChild(del);
+        row.appendChild(actionsTd);
+        tbody.appendChild(row);
+      });
+      renderStats();
+    }
+
+    function renderProjects() {
+      const list = $("#projectList");
+      list.innerHTML = "";
+      state.projects.forEach((project) => {
+        const row = document.createElement("div");
+        row.className = "project-row";
+        const info = document.createElement("div");
+        info.innerHTML = `<strong>${project.nom}</strong><div class="sub">${project.evenement} - ${project.derniere_mise_a_jour}</div>`;
+        const load = document.createElement("button");
+        load.type = "button";
+        load.textContent = project.id === state.project?.id ? "Actif" : "Charger";
+        load.disabled = project.id === state.project?.id;
+        load.addEventListener("click", () => loadProject(project.id));
+        row.append(info, load);
+        list.appendChild(row);
+      });
+      if (!state.projects.length) {
+        list.innerHTML = '<div class="empty">Aucun projet sauvegarde.</div>';
+      }
+    }
+
+    function renderProjectMeta() {
+      $("#appTitle").textContent = state.project.nom || "Party Manager";
+      $("#subtitle").textContent = `${state.project.evenement || "Evenement"} - mis a jour ${state.project.derniere_mise_a_jour || ""}`;
+      $("#projectName").value = state.project.nom || "";
+      $("#projectEvent").value = state.project.evenement || "";
+      $("#projectNotes").value = state.project.notes || "";
+      $("#projectContribution").value = state.project.contribution || "";
+      $("#messageText").value = state.project.message || "";
+    }
+
+    function render() {
+      if (!state.project) return;
+      ensureProjectDefaults();
+      renderProjectMeta();
+      renderStats();
+      renderGuests();
+      renderPrep();
+      renderBudget();
+      renderProjects();
+    }
+
+    function staticStorageKey(id = state.project?.id || "25ans-mariage") {
+      return `party-manager-project-${id}`;
+    }
+
+    function currentProjectSummary(project = state.project) {
+      return {
+        id: project.id,
+        nom: project.nom,
+        evenement: project.evenement,
+        derniere_mise_a_jour: project.derniere_mise_a_jour,
+      };
+    }
+
+    async function loadStaticProject() {
+      const storedActive = localStorage.getItem("party-manager-active-project") || "25ans-mariage";
+      const storedProject = localStorage.getItem(staticStorageKey(storedActive));
+      if (storedProject) {
+        return JSON.parse(storedProject);
+      }
+
+      const response = await fetch("json/projects/25ans-mariage.json");
+      if (!response.ok) throw new Error("Projet statique introuvable");
+      return response.json();
+    }
+
+    function saveStaticProject(project) {
+      project.derniere_mise_a_jour = new Date().toISOString().slice(0, 10);
+      localStorage.setItem(staticStorageKey(project.id), JSON.stringify(project));
+      localStorage.setItem("party-manager-active-project", project.id);
+      const summaries = JSON.parse(localStorage.getItem("party-manager-projects") || "[]");
+      const withoutCurrent = summaries.filter((item) => item.id !== project.id);
+      withoutCurrent.push(currentProjectSummary(project));
+      localStorage.setItem("party-manager-projects", JSON.stringify(withoutCurrent));
+    }
+
+    function guestCountText(guest) {
+      ensureGuest(guest);
+      if (guest.nombre_min === guest.nombre_max) {
+        return guest.nombre_max <= 1 ? `${guest.nombre_max} personne` : `${guest.nombre_max} personnes`;
+      }
+      return `${guest.nombre_min} a ${guest.nombre_max} personnes`;
+    }
+
+    function generateMessageClient() {
+      const stats = calculateInviteStats();
+      const lines = (state.project.invites || [])
+        .filter((guest) => guest.statut !== "refuse" && guest.presence !== "absent")
+        .map((guest) => {
+          const suffixes = [guestCountText(guest)];
+          if (guest.statut === "a_confirmer" || guest.nombre_min < guest.nombre_max) suffixes.push("a confirmer");
+          if (guest.presence === "present") suffixes.push("presence confirmee");
+          if (guest.presence === "peut_etre") suffixes.push("peut-etre");
+          if (guest.notes) suffixes.push(guest.notes.trim());
+          return `- ${guest.groupe || textFromPeople(guest.personnes) || "Invite sans nom"} (${suffixes.filter(Boolean).join(", ")})`;
+        });
+
+      return `Bonjour mes compatriotes,
+
+Le message que vous vous appretez a lire est top secret.
+
+Je commence tranquillement a organiser une fete pour celebrer les 25 ans de mariage de mes parents. Je suis presentement en train de preparer la liste des invites et je me demandais a combien de personnes on peut generalement s'attendre pour ce genre d'evenement.
+
+Pour l'instant, selon la liste actuelle, j'arrive a environ ${stats.min} a ${stats.max} personnes.
+
+Liste actuelle:
+
+${lines.join("\n") || "- Aucune personne dans la liste pour le moment."}
+
+Resume rapide:
+- Presences confirmees: ${stats.present}
+- Peut-etre: ${stats.maybe}
+- A confirmer / sans reponse: ${stats.unknown}
+
+Auriez-vous des suggestions d'amis a Valerie et Vincent?
+
+Gabriel et moi pensions faire un debut au restaurant et une fiesta a la maison pour la suite. En considerant la taille de notre maison, la temperature et la possibilite d'aller dehors, je ne sais pas encore quel serait notre maximum d'invites.
+`;
+    }
+
+    function exportProject() {
+      if (!state.project) return;
+      const blob = new Blob([JSON.stringify(state.project, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${state.project.id || "party"}.json`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      setStatus("Projet exporte en JSON");
+    }
+
+    async function importProject() {
+      const file = $("#importProjectFile").files?.[0];
+      if (!file) {
+        setStatus("Choisis un fichier JSON a importer.", true);
+        return;
+      }
+      const text = await file.text();
+      state.project = JSON.parse(text);
+      ensureProjectDefaults();
+      saveStaticProject(state.project);
+      state.dirty = false;
+      setStatus("Projet importe");
+      await refreshProjects();
+      render();
+    }
+
+    async function loadProjectData() {
+      setStatus("Chargement...");
+      try {
+        const response = await fetch("/api/project");
+        const payload = await response.json();
+        if (!response.ok) throw new Error(payload.error || "Chargement impossible");
+        state.serverMode = true;
+        state.project = payload;
+      } catch (error) {
+        state.serverMode = false;
+        state.project = await loadStaticProject();
+      }
+      ensureProjectDefaults();
+      state.dirty = false;
+      setStatus(state.serverMode ? "Projet charge" : "Projet charge en mode GitHub Pages");
+      await refreshProjects();
+      render();
+    }
+
+    async function refreshProjects() {
+      if (!state.serverMode) {
+        const summaries = JSON.parse(localStorage.getItem("party-manager-projects") || "[]");
+        const current = currentProjectSummary();
+        state.projects = [current, ...summaries.filter((item) => item.id !== current.id)];
+        renderProjects();
+        return;
+      }
+      const response = await fetch("/api/projects");
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || "Liste des projets impossible");
+      state.projects = payload.projects || [];
+      renderProjects();
+    }
+
+    async function saveProject() {
+      if (!state.project) return;
+      setStatus("Sauvegarde du projet...");
+      if (!state.serverMode) {
+        saveStaticProject(state.project);
+        state.dirty = false;
+        setStatus("Projet sauvegarde dans ce navigateur. Exporte le JSON pour le remettre sur GitHub.");
+        await refreshProjects();
+        render();
+        return;
+      }
+      const response = await fetch("/api/project", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(state.project),
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || "Sauvegarde impossible");
+      state.project = payload.project;
+      state.dirty = false;
+      setStatus("Projet sauvegarde");
+      await refreshProjects();
+      render();
+    }
+
+    async function loadProject(id) {
+      if (state.dirty && !window.confirm("Charger un autre projet va perdre les changements non sauvegardes. Continuer?")) return;
+      if (!state.serverMode) {
+        const storedProject = localStorage.getItem(staticStorageKey(id));
+        if (!storedProject) {
+          setStatus("Projet non trouve dans ce navigateur.", true);
+          return;
+        }
+        state.project = JSON.parse(storedProject);
+        localStorage.setItem("party-manager-active-project", state.project.id);
+        state.dirty = false;
+        setStatus("Projet charge depuis ce navigateur");
+        await refreshProjects();
+        render();
+        return;
+      }
+      const response = await fetch("/api/projects/load", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || "Chargement impossible");
+      state.project = payload.project;
+      state.dirty = false;
+      setStatus("Projet charge");
+      await refreshProjects();
+      render();
+    }
+
+    async function createProject() {
+      const nom = $("#newProjectName").value.trim();
+      if (!nom) {
+        setStatus("Entre un nom de projet avant de creer.", true);
+        return;
+      }
+      if (state.dirty && !window.confirm("Creer un nouveau projet va changer le projet actif. Continuer?")) return;
+      if (!state.serverMode) {
+        state.project = {
+          id: nom.toLowerCase().replace(/[^a-z0-9_-]+/g, "-").replace(/^-|-$/g, "") || "nouveau-party",
+          nom,
+          evenement: nom,
+          derniere_mise_a_jour: new Date().toISOString().slice(0, 10),
+          notes: "",
+          invites: [],
+          preparation: { restaurant: [], maison: [] },
+          budget: [],
+          message: "",
+          contribution: "",
+        };
+        saveStaticProject(state.project);
+        state.dirty = false;
+        $("#newProjectName").value = "";
+        setStatus("Nouveau projet cree dans ce navigateur");
+        await refreshProjects();
+        render();
+        return;
+      }
+      const response = await fetch("/api/projects/new", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nom }),
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || "Creation impossible");
+      state.project = payload.project;
+      state.dirty = false;
+      $("#newProjectName").value = "";
+      setStatus("Nouveau projet cree");
+      await refreshProjects();
+      render();
+    }
+
+    async function regenerateMessage() {
+      if (state.serverMode) {
+        await saveProject();
+        const response = await fetch("/api/message");
+        const payload = await response.json();
+        if (!response.ok) throw new Error(payload.error || "Generation impossible");
+        state.project.message = payload.generated;
+      } else {
+        state.project.message = generateMessageClient();
+      }
+      $("#messageText").value = state.project.message;
+      markDirty("Message regenere, sauvegarde le projet pour le garder");
+      setMessageStatus("Message regenere avec la liste actuelle");
+    }
+
+    function switchPage(page) {
+      state.activePage = page;
+      $$(".tab-btn").forEach((button) => button.classList.toggle("active", button.dataset.page === page));
+      $$(".page").forEach((section) => section.classList.toggle("active", section.id === `page-${page}`));
+    }
+
+    $("#saveProjectBtn").addEventListener("click", () => saveProject().catch((error) => setStatus(error.message, true)));
+    $("#reloadBtn").addEventListener("click", () => {
+      if (state.dirty && !window.confirm("Recharger va perdre les changements non sauvegardes. Continuer?")) return;
+      loadProjectData().catch((error) => setStatus(error.message, true));
+    });
+    $("#addGuestBtn").addEventListener("click", () => {
+      state.project.invites.push({ groupe: "Nouvel invite", personnes: [], nombre_min: 1, nombre_max: 1, statut: "a_inviter", presence: "inconnue", notes: "" });
+      markDirty();
+      renderGuests();
+    });
+    $("#addBudgetBtn").addEventListener("click", () => {
+      state.project.budget.push({ id: uid("budget"), categorie: "General", item: "Nouvelle depense", cout_estime: 0, cout_reel: 0, paye: 0, notes: "" });
+      markDirty();
+      renderBudget();
+    });
+    $("#generateMessageBtn").addEventListener("click", () => regenerateMessage().catch((error) => setMessageStatus(error.message, true)));
+    $("#copyMessageBtn").addEventListener("click", async () => {
+      await navigator.clipboard.writeText($("#messageText").value);
+      setMessageStatus("Message copie dans le presse-papiers");
+    });
+    $("#newProjectBtn").addEventListener("click", () => createProject().catch((error) => setStatus(error.message, true)));
+    $("#refreshProjectsBtn").addEventListener("click", () => refreshProjects().catch((error) => setStatus(error.message, true)));
+    $("#exportProjectBtn").addEventListener("click", exportProject);
+    $("#importProjectBtn").addEventListener("click", () => importProject().catch((error) => setStatus(error.message, true)));
+
+    $("#projectName").addEventListener("input", (event) => { state.project.nom = event.target.value; markDirty(); $("#appTitle").textContent = state.project.nom; });
+    $("#projectEvent").addEventListener("input", (event) => { state.project.evenement = event.target.value; markDirty(); });
+    $("#projectNotes").addEventListener("input", (event) => { state.project.notes = event.target.value; markDirty(); });
+    $("#projectContribution").addEventListener("input", (event) => { state.project.contribution = event.target.value; markDirty(); });
+    $("#messageText").addEventListener("input", (event) => { state.project.message = event.target.value; markDirty("Message modifie, non sauvegarde"); });
+    $$(".tab-btn").forEach((button) => button.addEventListener("click", () => switchPage(button.dataset.page)));
+    $$("[data-add-prep]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const section = button.dataset.addPrep;
+        state.project.preparation[section].push({ id: uid(section), titre: "Nouvelle tache", details: "", fait: false });
+        markDirty();
+        renderPrep();
+      });
+    });
+    [$("#searchInput"), $("#presenceFilter"), $("#statutFilter")].forEach((control) => {
+      control.addEventListener("input", renderGuests);
+      control.addEventListener("change", renderGuests);
+    });
+    window.addEventListener("beforeunload", (event) => {
+      if (!state.dirty) return;
+      event.preventDefault();
+      event.returnValue = "";
+    });
+
+    loadProjectData().catch((error) => setStatus(error.message, true));
+  </script>
+</body>
+</html>

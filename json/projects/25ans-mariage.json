@@ -1,0 +1,320 @@
+{
+  "id": "25ans-mariage",
+  "nom": "25 ans mariage",
+  "evenement": "25 ans de mariage",
+  "derniere_mise_a_jour": "2026-06-14",
+  "notes": "Party manager pour les 25 ans de mariage.",
+  "invites": [
+    {
+      "groupe": "Valerie et Vincent",
+      "personnes": [
+        "Valerie",
+        "Vincent"
+      ],
+      "nombre_min": 2,
+      "nombre_max": 2,
+      "statut": "confirme",
+      "notes": "les Mariers",
+      "presence": "present"
+    },
+    {
+      "groupe": "Ludovick et Lea",
+      "personnes": [
+        "Ludovick",
+        "Lea"
+      ],
+      "nombre_min": 2,
+      "nombre_max": 2,
+      "statut": "confirme",
+      "notes": "moi ",
+      "presence": "present"
+    },
+    {
+      "groupe": "Gabriel et copine",
+      "personnes": [
+        "Gabriel"
+      ],
+      "nombre_min": 1,
+      "nombre_max": 2,
+      "statut": "confirme",
+      "notes": "",
+      "presence": "present"
+    },
+    {
+      "groupe": "Katia et Ben",
+      "personnes": [
+        "Katia",
+        "Ben"
+      ],
+      "nombre_min": 2,
+      "nombre_max": 2,
+      "statut": "a_inviter",
+      "notes": "",
+      "presence": "inconnue"
+    },
+    {
+      "groupe": "Kristof et copine",
+      "personnes": [
+        "Kristof"
+      ],
+      "nombre_min": 1,
+      "nombre_max": 2,
+      "statut": "confirme",
+      "notes": "a voir avec thomas et horraire",
+      "presence": "present"
+    },
+    {
+      "groupe": "Cedrick et copine",
+      "personnes": [
+        "Cedrick"
+      ],
+      "nombre_min": 1,
+      "nombre_max": 2,
+      "statut": "a_inviter",
+      "notes": "",
+      "presence": "inconnue"
+    },
+    {
+      "groupe": "Kery",
+      "personnes": [
+        "Kery"
+      ],
+      "nombre_min": 1,
+      "nombre_max": 1,
+      "statut": "a_inviter",
+      "notes": "",
+      "presence": "inconnue"
+    },
+    {
+      "groupe": "Caroline et David",
+      "personnes": [
+        "Caroline",
+        "David"
+      ],
+      "nombre_min": 1,
+      "nombre_max": 2,
+      "statut": "a_inviter",
+      "notes": "",
+      "presence": "inconnue"
+    },
+    {
+      "groupe": "Amy et Thomas",
+      "personnes": [
+        "Amy",
+        "Thomas"
+      ],
+      "nombre_min": 1,
+      "nombre_max": 2,
+      "statut": "a_inviter",
+      "notes": "",
+      "presence": "inconnue"
+    },
+    {
+      "groupe": "Papi et Mami",
+      "personnes": [
+        "Papi",
+        "Mami"
+      ],
+      "nombre_min": 2,
+      "nombre_max": 2,
+      "statut": "a_inviter",
+      "notes": "",
+      "presence": "inconnue"
+    },
+    {
+      "groupe": "Grand-maman et Gille",
+      "personnes": [
+        "Grand-maman",
+        "Gille"
+      ],
+      "nombre_min": 2,
+      "nombre_max": 2,
+      "statut": "confirme",
+      "notes": "",
+      "presence": "present"
+    },
+    {
+      "groupe": "Lisane et Claude",
+      "personnes": [
+        "Lisane",
+        "Claude"
+      ],
+      "nombre_min": 2,
+      "nombre_max": 2,
+      "statut": "a_inviter",
+      "notes": "",
+      "presence": "inconnue"
+    },
+    {
+      "groupe": "Loic",
+      "personnes": [
+        "Loic"
+      ],
+      "nombre_min": 1,
+      "nombre_max": 1,
+      "statut": "a_inviter",
+      "notes": "",
+      "presence": "inconnue"
+    },
+    {
+      "groupe": "Jasmine",
+      "personnes": [
+        "Jasmine"
+      ],
+      "nombre_min": 1,
+      "nombre_max": 1,
+      "statut": "a_inviter",
+      "notes": "",
+      "presence": "inconnue"
+    },
+    {
+      "groupe": "Juliette",
+      "personnes": [
+        "Juliette"
+      ],
+      "nombre_min": 1,
+      "nombre_max": 1,
+      "statut": "a_inviter",
+      "notes": "",
+      "presence": "inconnue"
+    },
+    {
+      "groupe": "Christian et Femme",
+      "personnes": [
+        "Christian"
+      ],
+      "nombre_min": 1,
+      "nombre_max": 2,
+      "statut": "a_inviter",
+      "notes": "Cousin de Valerie a voir",
+      "presence": "inconnue"
+    },
+    {
+      "groupe": "Yolande",
+      "personnes": [
+        "fernande"
+      ],
+      "nombre_min": 2,
+      "nombre_max": 2,
+      "statut": "a_inviter",
+      "presence": "inconnue",
+      "notes": "matante a maman"
+    }
+  ],
+  "resume": {
+    "nombre_minimum": 24,
+    "nombre_maximum": 30,
+    "a_confirmer": [
+      "Gabriel et copine",
+      "Kristof et copine",
+      "Cedrick et copine",
+      "Caroline et David",
+      "Amy et Thomas",
+      "Christian et Femme"
+    ],
+    "groupes_conserves": [
+      "Valerie et Vincent",
+      "Papi et Mami",
+      "Grand-maman et Gille",
+      "Lisane et Claude"
+    ],
+    "presence_confirmee": 10,
+    "presence_absente": 0,
+    "presence_peut_etre": 0,
+    "presence_inconnue": 20
+  },
+  "message": "Bonjour mes compatriotes,\n\nLe message que vous vous apprêtez à lire est top secret.\n\nJe commence tranquillement à organiser une fête pour célébrer les 25 ans de mariage de mes parents, Valérie et Vincent. Comme l'événement est une surprise, j'ai besoin de votre aide pour planifier le tout.\n\nL'idée actuelle serait de commencer la soirée au restaurant, puis de poursuivre avec une fiesta à la maison pour ceux qui souhaitent continuer après le repas. Ainsi, les gens qui préfèrent simplement venir souper pourront repartir après le restaurant, tandis que les autres pourront poursuivre la soirée avec nous.\n\nPour le moment, selon la liste actuelle, nous sommes entre 25 et 35 personnes. Comme nous avons une bonne cour extérieure et que l'événement aurait lieu en été, la capacité maximale reste à déterminer selon le nombre de confirmations.\n\nLes dates envisagées sont le 17 juillet ou le 18 juillet.\n\nAfin de nous aider à organiser l'événement, pourriez-vous répondre aux trois questions suivantes :\n\n1. Quelle date préférez-vous ?\n\n17 juillet\n18 juillet\n\n2. Serez-vous présent(e) ?\n\nOui\nNon\n\n3. Serez-vous accompagné(e) de votre conjoint(e) ou d'un(e) invité(e) ?\n\nOui\nNon\n\nExemple :\n\nDate : 18 juillet\nPrésence : Oui\nAccompagnateur(trice) : Oui\n\nNous regardons également la possibilité de réserver une salle privée au restaurant Les Berges. Nous prendrons en charge les frais de location de la salle, tandis que chacun paiera sa propre facture au restaurant.\n\nEnfin, auriez-vous des suggestions d'amis, de collègues ou de membres de la famille que Valérie et Vincent aimeraient probablement voir à cette occasion ? Comme c'est une surprise, je ne peux malheureusement pas leur demander directement.\n\nMerci à tous pour votre aide, vos idées et surtout votre discrétion !\n\nSteak Haché\nDenise Trudeau\nCabotine Berard\nGilles Trudeau\nBenoît Goyette\nKatia Berard\nKery Berard Goyette\nKristof Bérard-Goyette\nCédrik Bérard-Goyette\nEillemy ViviZer\nCaroline Vivier\nDavid Letellier\nLisane Trudeau\nClaude Philippon\nLoïc Philippon\nJasmine Philippon\nJuliette Philippon\nYolande Trudeau\nYolande Trudeau\nFernande Trudeau\nLéa Champigny\nGabriel Be\n",
+  "preparation": {
+    "restaurant": [
+      {
+        "id": "restaurant-1",
+        "titre": "Appeler Les Berges",
+        "details": "Verifier disponibilite pour 25 a 35 personnes.",
+        "fait": false
+      },
+      {
+        "id": "restaurant-2",
+        "titre": "Verifier le gateau",
+        "details": "Demander si on peut apporter un gateau de l'exterieur.",
+        "fait": false
+      },
+      {
+        "id": "restaurant-3",
+        "titre": "Clarifier la facture",
+        "details": "Voir comment gerer groupe, contribution et paiement.",
+        "fait": false
+      }
+    ],
+    "maison": [
+      {
+        "id": "maison-1",
+        "titre": "Acheter chips et cochonneries",
+        "details": "Grignotines pour la fiesta apres le restaurant.",
+        "fait": false
+      },
+      {
+        "id": "maison-2",
+        "titre": "Prevoir alcool et boissons sans alcool",
+        "details": "Ajuster selon qui suit a la maison.",
+        "fait": false
+      },
+      {
+        "id": "maison-3",
+        "titre": "Preparer jeux de societe, musique et karaoke",
+        "details": "Ambiance relax et festive.",
+        "fait": false
+      },
+      {
+        "id": "maison-4",
+        "titre": "Prevoir le gateau",
+        "details": "Decider si le gateau est au restaurant ou a la maison.",
+        "fait": false
+      }
+    ]
+  },
+  "budget": [
+    {
+      "id": "budget-1",
+      "categorie": "Restaurant",
+      "item": "Souper Les Berges",
+      "cout_estime": 814.88,
+      "cout_reel": 0.0,
+      "paye": 0.0,
+      "notes": "574.88 salle + papa 120 + maman 120$ (repas)"
+    },
+    {
+      "id": "budget-2",
+      "categorie": "Maison",
+      "item": "Chips et cochonneries",
+      "cout_estime": 40.0,
+      "cout_reel": 0.0,
+      "paye": 0.0,
+      "notes": "pt marie claude cosco bouffe"
+    },
+    {
+      "id": "budget-3",
+      "categorie": "Maison",
+      "item": "Alcool et boissons",
+      "cout_estime": 150.0,
+      "cout_reel": 0.0,
+      "paye": 0.0,
+      "notes": ""
+    },
+    {
+      "id": "budget-4",
+      "categorie": "Gateau",
+      "item": "Gateau 25 ans",
+      "cout_estime": 40.0,
+      "cout_reel": 0.0,
+      "paye": 0.0,
+      "notes": ""
+    }
+  ],
+  "contribution": "Les gens pourront contribuer s'ils le souhaitent comme cadeau de 25e anniversaire.",
+  "budget_resume": {
+    "total_estime": 1044.88,
+    "total_reel": 0.0,
+    "total_paye": 0.0,
+    "reste_a_payer": 0.0
+  }
+}
